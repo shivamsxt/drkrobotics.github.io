@@ -1,14 +1,4 @@
-<!doctype html>
-<!--
-  Shivam — Static Portfolio (read-only)
-  -------------------------------------------------
-  IMPORTANT:
-  - This file is a static, read-only portfolio intended for public viewing.
-  - **Edit the data below** in the `DATA` constant to update projects, resume link, skills, and learning posts.
-  - Do **not** expose editing/upload UI on the published page — only change the code in this file or a separate `data.js` that you keep private.
-
-  Deployment: save as `index.html` at repo root and publish via GitHub Pages (main / root).
--->
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -16,246 +6,169 @@
   <title>Shivam — Robotics Engineer</title>
   <meta name="description" content="Shivam — Robotics Engineer. Perception, SLAM, Embedded, ROS" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body id="pageRoot">
-  <header class="sticky top-0 z-40">
+<body>
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-[var(--bg)]/80 backdrop-blur-md shadow-sm">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <svg class="logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-          <rect x="4" y="4" width="40" height="40" rx="8" fill="#0891b2"></rect>
+        <svg class="w-10 h-10" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#06b6d4"></rect>
           <path d="M14 34L24 14L34 34" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <div>
-          <div class="text-lg font-extrabold">Shivam</div>
-          <div class="text-xs muted">Robotics Engineer · Perception · SLAM · Embedded</div>
+          <div class="text-xl font-extrabold">Shivam</div>
+          <div class="text-xs text-[var(--muted)]">Robotics Engineer · Perception · SLAM · Embedded</div>
         </div>
       </div>
-
       <nav class="flex items-center gap-3 text-sm">
-        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="about">About</button>
-        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="projects">Projects</button>
-        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="resume">Resume</button>
-        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="skills">Skills</button>
-        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="learning">Learning</button>
-        <button id="themeToggle" class="px-3 py-2 rounded border">🌙</button>
+        <button data-scroll="about">About</button>
+        <button data-scroll="projects">Projects</button>
+        <button data-scroll="resume">Resume</button>
+        <button data-scroll="skills">Skills</button>
+        <button data-scroll="learning">Learning</button>
+        <button id="themeToggle" class="ml-2 px-2 py-1 border rounded">🌙</button>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-10">
-    <!-- ABOUT -->
-    <section id="about" class="reveal mb-8 card p-6">
-      <div class="md:flex md:items-center md:justify-between gap-6">
-        <div>
-          <h1 class="text-3xl font-extrabold">I build robots that see, plan, and act.</h1>
-          <p class="mt-3 muted">Robotics engineer focused on perception, autonomy, and embedded control. Production-minded: SLAM, perception pipelines, sensor fusion and edge deployment.</p>
-
-          <div class="mt-4 flex gap-3">
-            <a id="resumeDownload" class="px-4 py-2 rounded border text-sm" href="#">Download resume</a>
-            <a class="px-4 py-2 rounded bg-sky-600 text-white text-sm desktop-only" href="#projects">See projects</a>
-          </div>
-        </div>
-
-        <div class="mt-6 md:mt-0 w-full md:w-1/3">
-          <div class="p-4 card">
-            <div class="text-sm muted">Quick stats</div>
-            <div class="mt-3 grid grid-cols-2 gap-3">
-              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">Robots built</div><div class="text-lg font-bold" id="statRobots">—</div></div>
-              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">SLAM stacks</div><div class="text-lg font-bold" id="statSlam">—</div></div>
-              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">Edge deploys</div><div class="text-lg font-bold" id="statEdge">—</div></div>
-              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">Languages</div><div class="text-lg font-bold" id="statLang">—</div></div>
-            </div>
-          </div>
-        </div>
+  <main class="max-w-6xl mx-auto px-6 py-10 space-y-12">
+    <!-- About -->
+    <section id="about" class="card reveal">
+      <h1 class="text-3xl font-extrabold mb-2" id="headline"></h1>
+      <p class="text-[var(--muted)] mb-5" id="sub"></p>
+      <div class="flex gap-3">
+        <a id="resumeDownload" class="btn" href="#" download>Download Resume</a>
+        <a href="#projects" class="btn-accent">See Projects</a>
       </div>
+      <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3" id="stats"></div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="reveal mb-8">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-semibold">Projects</h2>
-        <div class="muted text-sm">All project links and demos are stored in the code — update `DATA.projects` to change.</div>
-      </div>
-
+    <!-- Projects -->
+    <section id="projects" class="reveal">
+      <h2 class="section-title">Projects</h2>
       <div id="projectsGrid" class="grid md:grid-cols-2 gap-6"></div>
     </section>
 
-    <!-- RESUME -->
-    <section id="resume" class="reveal mb-8 card p-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-semibold">Resume</h2>
-        <a id="resumeLinkTop" href="#" target="_blank" class="px-3 py-2 rounded border text-sm">Open PDF</a>
+    <!-- Resume -->
+    <section id="resume" class="card reveal">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="section-title">Resume</h2>
+        <a id="resumeLink" class="btn" href="#" target="_blank">Open PDF</a>
       </div>
-      <div class="mt-4 muted text-sm">Resume PDF link is configured in the code (DATA.resume.url). Edit DATA to update.</div>
+      <p class="text-[var(--muted)] text-sm">PDF link set in the code (DATA.resume.url)</p>
     </section>
 
-    <!-- SKILLS -->
-    <section id="skills" class="reveal mb-8">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-semibold">Skills</h2>
-        <div class="muted text-sm">Skills are read-only and stored in the code.</div>
-      </div>
+    <!-- Skills -->
+    <section id="skills" class="reveal">
+      <h2 class="section-title mb-4">Skills</h2>
       <div id="skillsList" class="flex flex-wrap gap-2"></div>
     </section>
 
-    <!-- LEARNING JOURNAL -->
-    <section id="learning" class="reveal mb-8 card p-4">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-semibold">Learning Journal</h2>
-        <div class="muted text-sm">Weekly learning posts — edit `DATA.posts` to change or add posts.</div>
-      </div>
+    <!-- Learning -->
+    <section id="learning" class="card reveal">
+      <h2 class="section-title mb-4">Learning Journal</h2>
       <div id="postsList" class="grid gap-4"></div>
     </section>
-
-    <footer class="mt-12 text-center muted">© <span id="yearEl"></span> Shivam — Robotics Engineer</footer>
   </main>
 
+  <footer class="text-center py-8 text-sm text-[var(--muted)]">© <span id="year"></span> Shivam — Robotics Engineer</footer>
+
   <script>
-    // ------------------ DATA: Edit this object to update your portfolio ------------------
-    // Keep this file private when editing; once published, the page is read-only to visitors.
+    // ---------- DATA ----------
     const DATA = {
+      resume: { name: 'Shivam_Resume.pdf', url: 'resume.pdf' },
       about: {
         headline: 'I build robots that see, plan, and act.',
-        sub: 'Robotics engineer focused on perception, autonomy, and embedded control. Production-minded: SLAM, sensor fusion and edge deployment.'
+        sub: 'Robotics engineer specialized in perception, SLAM, and embedded systems. Production-focused with experience from prototype to deployment.'
       },
-      resume: {
-        name: 'Shivam_Resume.pdf',
-        url: 'resume.pdf' // put your resume.pdf at repo root or a hosted URL
-      },
-      stats: { robots: 4, slam: 3, edge: 2, lang: 'C++, Python' },
-      skills: ['C++', 'Python', 'ROS1', 'ROS2', 'OpenCV', 'PCL', 'PyTorch', 'TensorRT', 'Docker'],
+      stats: [
+        { label: 'Robots Built', value: 4 },
+        { label: 'SLAM Systems', value: 3 },
+        { label: 'Edge Deploys', value: 2 },
+        { label: 'Languages', value: 'C++, Python' }
+      ],
       projects: [
         {
           title: 'Autonomous Mobile Robot',
-          description: 'Full ROS2 stack: LiDAR + camera fusion, ORB-SLAM3 mapping, A* planner, deployed on Jetson.',
+          description: 'ROS2 stack: LiDAR + camera fusion, ORB-SLAM3 mapping, A* planner, Jetson deploy.',
           repo: 'https://github.com/shivamsxt/autonomous-mobile-robot',
-          demo: 'https://youtube.com/your-demo-link',
           image: 'images/project1.jpg'
         },
         {
-          title: 'LiDAR SLAM & 3D Mapping',
-          description: 'Robust outdoor mapping pipeline with loop closure and ICP refinement.',
+          title: 'LiDAR SLAM & Mapping',
+          description: '3D mapping with loop closure, ICP refinement, real-world test deployment.',
           repo: 'https://github.com/shivamsxt/lidar-slam',
-          demo: '',
           image: 'images/project2.jpg'
         }
       ],
+      skills: ['C++', 'Python', 'ROS1', 'ROS2', 'OpenCV', 'PCL', 'PyTorch', 'TensorRT', 'Docker', 'Gazebo'],
       posts: [
-        { title: 'Week 1: Sensor Calibration', week: '2025-07-01', content: 'Calibrated camera-LiDAR extrinsics and improved depth fusion.', image: '', video: '' },
-        { title: 'Week 2: ORB-SLAM3 Tuning', week: '2025-07-08', content: 'Tuned ORB features and keyframe settings for indoor mapping.', image: '', video: '' }
+        { title: 'Week 1: Sensor Calibration', date: '2025-07-01', content: 'Calibrated camera-LiDAR extrinsics and improved fusion.', image: '' },
+        { title: 'Week 2: ORB-SLAM3 Tuning', date: '2025-07-08', content: 'Optimized feature extraction and keyframe logic.', image: '' }
       ]
     };
-    // ------------------ end DATA ------------------
 
-    // --------------- Rendering (read-only) ---------------
-    function $(sel){ return document.querySelector(sel); }
-    function $all(sel){ return Array.from(document.querySelectorAll(sel)); }
-
-    function renderAbout(){
-      document.querySelector('#about h1').textContent = DATA.about.headline;
-      document.querySelector('#about p').textContent = DATA.about.sub;
+    // ---------- RENDER ----------
+    function $(s){ return document.querySelector(s); }
+    const render = () => {
+      $('#headline').textContent = DATA.about.headline;
+      $('#sub').textContent = DATA.about.sub;
       $('#resumeDownload').href = DATA.resume.url;
-      $('#resumeDownload').setAttribute('download', DATA.resume.name);
-      $('#resumeLinkTop').href = DATA.resume.url;
+      $('#resumeLink').href = DATA.resume.url;
+      $('#year').textContent = new Date().getFullYear();
 
-      // stats
-      document.getElementById('statRobots').textContent = DATA.stats.robots;
-      document.getElementById('statSlam').textContent = DATA.stats.slam;
-      document.getElementById('statEdge').textContent = DATA.stats.edge;
-      document.getElementById('statLang').textContent = DATA.stats.lang;
-    }
+      // Stats
+      $('#stats').innerHTML = DATA.stats.map(s => `
+        <div class="card stat"><div class="text-xs text-[var(--muted)]">${s.label}</div><div class="text-lg font-bold">${s.value}</div></div>
+      `).join('');
 
-    function renderProjects(){
-      const grid = document.getElementById('projectsGrid'); grid.innerHTML = '';
-      DATA.projects.forEach(p=>{
-        const card = document.createElement('div');
-        card.className = 'card p-4 hover-card reveal';
-        card.innerHTML = `
-          <div class="md:flex gap-4 items-start">
-            <div class="md:w-48 mb-3 md:mb-0">
-              ${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}" class="thumb" />` : `<div class="w-full h-40 bg-gray-100 rounded flex items-center justify-center muted">No image</div>`}
-            </div>
-            <div class="flex-1">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <div class="font-semibold text-lg">${escapeHtml(p.title)}</div>
-                  <div class="muted text-sm mt-1">${escapeHtml(p.description)}</div>
-                </div>
-                <div class="text-right flex flex-col gap-2">
-                  ${p.repo ? `<a href="${p.repo}" target="_blank" class="text-xs underline">Repo</a>` : ''}
-                  ${p.demo ? `<a href="${p.demo}" target="_blank" class="text-xs underline">Demo</a>` : ''}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
+      // Projects
+      $('#projectsGrid').innerHTML = DATA.projects.map(p => `
+        <div class="card hover-card">
+          ${p.image ? `<img src="${p.image}" class="thumb mb-3">` : ''}
+          <h3 class="font-semibold text-lg">${p.title}</h3>
+          <p class="text-[var(--muted)] text-sm mt-1">${p.description}</p>
+          <a href="${p.repo}" class="text-sm underline mt-2 inline-block" target="_blank">View Repo</a>
+        </div>
+      `).join('');
 
-    function renderSkills(){
-      const list = document.getElementById('skillsList'); list.innerHTML = '';
-      DATA.skills.forEach(s=>{
-        const span = document.createElement('span'); span.className='px-3 py-1 bg-gray-100 rounded text-sm muted'; span.textContent = s; list.appendChild(span);
-      });
-    }
+      // Skills
+      $('#skillsList').innerHTML = DATA.skills.map(s => `<span class="skill">${s}</span>`).join('');
 
-    function renderPosts(){
-      const box = document.getElementById('postsList'); box.innerHTML = '';
-      DATA.posts.slice().reverse().forEach(post=>{
-        const card = document.createElement('div'); card.className='card p-4 reveal';
-        card.innerHTML = `
-          <div>
-            <div class="flex items-center justify-between">
-              <div>
-                <div class="font-semibold">${escapeHtml(post.title)}</div>
-                <div class="muted text-xs">${escapeHtml(post.week)}</div>
-              </div>
-            </div>
-            <div class="mt-2 text-sm">${escapeHtml(post.content)}</div>
-            ${post.image ? `<img src="${post.image}" class="mt-3 thumb" />` : ''}
-            ${post.video ? `<video src="${post.video}" controls class="mt-3 w-full" />` : ''}
-          </div>
-        `;
-        box.appendChild(card);
-      });
-    }
+      // Learning posts
+      $('#postsList').innerHTML = DATA.posts.map(p => `
+        <div class="card">
+          <h3 class="font-semibold">${p.title}</h3>
+          <div class="text-xs text-[var(--muted)]">${p.date}</div>
+          <p class="text-sm mt-2">${p.content}</p>
+          ${p.image ? `<img src="${p.image}" class="thumb mt-2">` : ''}
+        </div>
+      `).join('');
+    };
 
-    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    // ---------- Reveal Animations ----------
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
+    }, { threshold: 0.2 });
+    const initReveal = () => document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // --------------- Theme handling (fixed) ---------------
+    // ---------- Dark Mode ----------
     function applyTheme(isDark){
       document.documentElement.classList.toggle('dark-mode', !!isDark);
-      localStorage.setItem('shivam_theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
       $('#themeToggle').textContent = isDark ? '☀️' : '🌙';
     }
+    $('#themeToggle').onclick = () => applyTheme(!document.documentElement.classList.contains('dark-mode'));
+    if(localStorage.getItem('theme') === 'dark') applyTheme(true);
 
-    $('#themeToggle').addEventListener('click', ()=>{ const dark = !document.documentElement.classList.contains('dark-mode'); applyTheme(dark); });
-    // restore
-    const savedTheme = localStorage.getItem('shivam_theme'); if(savedTheme === 'dark') applyTheme(true);
+    // ---------- Nav ----------
+    document.querySelectorAll('[data-scroll]').forEach(btn => {
+      btn.onclick = () => document.getElementById(btn.dataset.scroll).scrollIntoView({behavior:'smooth'});
+    });
 
-    // --------------- Smooth nav ---------------
-    $all('button[data-scroll]').forEach(b=> b.addEventListener('click', ()=>{ const id = b.getAttribute('data-scroll'); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }));
-
-    // --------------- Intersection reveal ---------------
-    const obs = new IntersectionObserver((entries)=>{ entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('visible'); }); }, {threshold:0.12});
-    function observeReveals(){ $all('.reveal').forEach(el=>obs.observe(el)); }
-
-    // --------------- Init ---------------
-    function init(){
-      renderAbout(); renderProjects(); renderSkills(); renderPosts();
-      observeReveals();
-      document.getElementById('yearEl').textContent = new Date().getFullYear();
-      // small entrance animation
-      document.body.animate([{opacity:0},{opacity:1}],{duration:260});
-    }
-
-    init();
-
-    // --------------- Editing note for you ---------------
-    // To update content, edit the DATA constant at the top of this file or split DATA into a private `data.js` that you do not expose publicly.
-    // Do NOT add editing UI or file upload on the public page. Keep ALL write operations out of client-facing HTML.
+    render(); initReveal();
   </script>
 </body>
 </html>
