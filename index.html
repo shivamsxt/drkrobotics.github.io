@@ -3,155 +3,461 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Shivam — Robotics Engineer</title>
-  <!-- Tailwind CDN for quick use -->
+  <title>Shivam — Robotics Engineer Portfolio</title>
+  <!-- Tailwind CDN for quick styling -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body{transition:background .25s,color .25s}
-    .logo{width:36px;height:36px;display:inline-block;vertical-align:middle;margin-right:8px}
-    @keyframes logo-spin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(18deg) scale(1.04)}100%{transform:rotate(360deg) scale(1)}}
-    .logo-anim{animation:logo-spin 5s linear infinite}
-    .contact-fab{position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,#0ea5e9,#0284c7);color:#fff;padding:10px 14px;border-radius:9999px;box-shadow:0 8px 24px rgba(2,6,23,0.35);z-index:60;font-weight:600;display:flex;align-items:center;gap:8px;text-decoration:none}
-    .animate-fadeIn{animation:fadeIn .5s ease both}
-    .animate-fadeInUp{animation:fadeInUp .55s ease both}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    /* Visual polish */
+    :root{
+      --accent:#06b6d4;
+      --accent-2:#0ea5e9;
+      --card-bg: #ffffff;
+      --muted:#6b7280;
+    }
+    .dark { --card-bg:#0f172a; --muted:#9ca3af; }
+    body{transition:background .25s,color .25s;}
+    .logo{width:40px;height:40px}
+    .contact-fab{position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px 14px;border-radius:9999px;box-shadow:0 10px 30px rgba(2,6,23,0.25);z-index:60;font-weight:600;display:flex;align-items:center;gap:8px;text-decoration:none}
+
+    /* Reveal on scroll */
+    .reveal { opacity:0; transform:translateY(14px) scale(.995); transition:opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    /* Tiny card animation */
+    .card { background:var(--card-bg); box-shadow:0 6px 20px rgba(2,6,23,0.06); border-radius:12px; }
+
+    /* Modal */
+    .modal-backdrop{ background: rgba(2,6,23,0.5); position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:80 }
+    .modal{ width:100%; max-width:720px; background:var(--card-bg); padding:18px; border-radius:10px; box-shadow:0 10px 40px rgba(2,6,23,0.3); }
+
+    /* Simple pulsing for CTA */
+    @keyframes pulseSlow { 0% { transform:scale(1) } 50% { transform:scale(1.03) } 100% { transform:scale(1) } }
+    .pulse { animation: pulseSlow 3s infinite; }
+
+    /* responsive tweaks */
+    @media (max-width:640px){ .desktop-only{ display:none } }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen">
-  <header class="bg-white shadow">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-      <div class="flex items-center">
-        <!-- Animated SVG logo -->
-        <svg class="logo logo-anim" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-          <rect x="4" y="4" width="40" height="40" rx="8" fill="#0369a1"></rect>
+<body class="bg-gray-50 text-gray-900 min-h-screen" id="pageRoot">
+  <!-- Header -->
+  <header class="bg-white dark:bg-slate-900 shadow sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg class="logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="var(--accent)"></rect>
           <path d="M14 34L24 14L34 34" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <div>
-          <h1 class="text-2xl font-extrabold">Shivam</h1>
-          <p class="text-sm text-gray-600">Robotics Engineer — Perception · Control · Embedded · ROS</p>
+          <div class="text-xl font-extrabold leading-none">Shivam</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">Robotics Engineer · Perception · ROS · Embedded</div>
         </div>
       </div>
 
-      <nav class="flex gap-4 items-center text-sm">
-        <button data-scroll-to="projects" class="hover:underline bg-transparent">Projects</button>
-        <button data-scroll-to="skills" class="hover:underline bg-transparent">Skills</button>
-        <button data-scroll-to="experience" class="hover:underline bg-transparent">Experience</button>
-        <button data-scroll-to="contact" class="px-3 py-1 rounded bg-blue-600 text-white">Contact</button>
-        <button id="themeToggle" class="toggle-btn text-sm border px-2 py-1 rounded">🌙</button>
+      <nav class="flex items-center gap-3 text-sm">
+        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="about">About</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="projects">Projects</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="resume">Resume</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="skills">Skills</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="learning">Learning</button>
+        <button id="themeToggle" class="px-3 py-2 rounded border text-sm" aria-label="toggle theme">🌙</button>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-12">
-    <section class="grid md:grid-cols-2 gap-8 items-center animate-fadeIn">
-      <div>
-        <h2 class="text-4xl font-extrabold leading-tight">I build robots that see, plan, and act.</h2>
-        <p class="mt-4 text-gray-700">I'm a robotics engineer focused on perception, autonomy, and embedded control. I take systems from prototype to deployment — ROS, SLAM, sensor fusion, deep learning inference on edge devices, motion control and system integration.</p>
-        <div class="mt-6 flex gap-3">
-          <a href="#projects" class="px-4 py-2 rounded bg-gray-900 text-white text-sm">See projects</a>
-          <a href="resume.pdf" class="px-4 py-2 rounded border border-gray-300 text-sm">Download resume</a>
-        </div>
-      </div>
+  <!-- Main content -->
+  <main class="max-w-6xl mx-auto px-6 py-10">
+    <!-- HERO / ABOUT -->
+    <section id="about" class="reveal p-6 card mb-8">
+      <div class="md:flex md:items-center md:justify-between gap-6">
+        <div>
+          <h1 class="text-3xl font-extrabold">I build robots that see, plan, and act.</h1>
+          <p class="mt-3 text-gray-600 dark:text-gray-300">Robotics engineer focused on perception, autonomy, and embedded systems. I build SLAM stacks, perception pipelines, and production-ready edge deployments.</p>
 
-      <div class="bg-white rounded-2xl shadow p-6 animate-fadeInUp">
-        <h3 class="font-semibold mb-3">Quick stats</h3>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="p-3 bg-gray-50 rounded"><div class="text-xs">Robots built</div><div class="text-2xl font-bold">4</div></div>
-          <div class="p-3 bg-gray-50 rounded"><div class="text-xs">SLAM stacks</div><div class="text-2xl font-bold">3</div></div>
-          <div class="p-3 bg-gray-50 rounded"><div class="text-xs">Edge deployments</div><div class="text-2xl font-bold">2</div></div>
-          <div class="p-3 bg-gray-50 rounded"><div class="text-xs">Languages</div><div class="text-2xl font-bold">C++, Python</div></div>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a id="resumeLink" class="px-4 py-2 rounded border text-sm" href="#" target="_blank">Download resume</a>
+            <button id="editAbout" class="px-4 py-2 rounded bg-sky-600 text-white text-sm">Edit About</button>
+            <a class="px-4 py-2 rounded bg-gray-800 text-white text-sm desktop-only pulse" href="#projects">See projects</a>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section id="skills" class="mt-12 animate-fadeIn">
-      <h3 class="text-xl font-semibold">Core skills</h3>
-      <div class="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="p-4 bg-white rounded shadow"><h4 class="font-medium">Perception</h4><p class="text-sm mt-2">Camera & LiDAR, depth estimation, detection, segmentation, PCL.</p></div>
-        <div class="p-4 bg-white rounded shadow"><h4 class="font-medium">ROS & Middleware</h4><p class="text-sm mt-2">ROS1 & ROS2, node architecture, TF, rosbag, lifecycle nodes.</p></div>
-        <div class="p-4 bg-white rounded shadow"><h4 class="font-medium">Algorithms</h4><p class="text-sm mt-2">SLAM, EKF, UKF, A*, RRT, model predictive control.</p></div>
-        <div class="p-4 bg-white rounded shadow"><h4 class="font-medium">Embedded & Edge</h4><p class="text-sm mt-2">STM32, ESP32, Jetson, TensorRT, Docker, OpenVINO.</p></div>
-      </div>
-    </section>
-
-    <section id="projects" class="mt-12 animate-fadeInUp">
-      <h3 class="text-xl font-semibold">Highlighted Projects</h3>
-      <div class="mt-6 grid md:grid-cols-2 gap-6">
-        <div class="bg-white p-5 rounded-lg shadow hover:scale-[1.01] transition-transform">
-          <h4 class="font-bold">Autonomous Mobile Robot</h4>
-          <p class="text-sm mt-2">Full ROS2 stack: LiDAR + camera fusion, ORB-SLAM3 mapping, A* planner, Jetson deploy.</p>
-        </div>
-        <div class="bg-white p-5 rounded-lg shadow hover:scale-[1.01] transition-transform">
-          <h4 class="font-bold">Embedded Motor Control + ROS Bridge</h4>
-          <p class="text-sm mt-2">STM32 real-time controller with ROS serial bridge and PID auto-tuning.</p>
+        <div class="mt-6 md:mt-0 w-full md:w-1/3">
+          <div class="card p-4">
+            <div class="text-sm text-gray-500">Quick stats</div>
+            <div class="mt-3 grid grid-cols-2 gap-3">
+              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
+                <div class="text-xs text-gray-500">Robots built</div>
+                <div class="text-lg font-bold">4</div>
+              </div>
+              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
+                <div class="text-xs text-gray-500">SLAM stacks</div>
+                <div class="text-lg font-bold">3</div>
+              </div>
+              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
+                <div class="text-xs text-gray-500">Edge deploys</div>
+                <div class="text-lg font-bold">2</div>
+              </div>
+              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
+                <div class="text-xs text-gray-500">Languages</div>
+                <div class="text-lg font-bold">C++, Python</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="experience" class="mt-12 bg-white p-6 rounded shadow animate-fadeIn">
-      <h3 class="text-lg font-semibold">GitHub & Workflow</h3>
-      <pre class="text-xs bg-gray-100 mt-3 p-3 rounded overflow-auto">recommended-github-organization/
-├─ perception/
-│  ├─ README.md
-│  ├─ src/
-│  └─ launch/
-├─ navigation/
-│  ├─ README.md
-│  └─ launch/
-├─ firmware/
-│  ├─ stm32_project/
-│  └─ docs/
-└─ sim/
-   ├─ world_files/
-   └─ launch/</pre>
+    <!-- PROJECTS (editable) -->
+    <section id="projects" class="reveal mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-semibold">Projects</h2>
+        <div class="flex gap-2">
+          <button id="addProject" class="px-3 py-2 rounded bg-green-600 text-white text-sm">+ Add project</button>
+          <button id="exportDataProjects" class="px-3 py-2 rounded border text-sm">Export</button>
+        </div>
+      </div>
+
+      <div id="projectsGrid" class="grid md:grid-cols-2 gap-4"></div>
+
+      <p class="mt-3 text-sm text-gray-500">Click a card's Edit to change title/links/description or upload an image. Use Add project to create new cards. All data saved locally (you can export/import).</p>
     </section>
 
-    <section id="contact" class="mt-12 animate-fadeIn">
-      <div class="bg-white p-6 rounded shadow">
-        <h3 class="text-lg font-semibold">Contact</h3>
-        <p class="text-sm mt-2">Email: <a href="mailto:shivam@example.com" class="underline">shivam@example.com</a></p>
-        <p class="text-sm">GitHub: <a href="https://github.com/shivamsxt" class="underline">github.com/shivamsxt</a></p>
+    <!-- RESUME (editable upload + text) -->
+    <section id="resume" class="reveal mb-8 card p-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-semibold">Resume</h2>
+        <div class="flex gap-2">
+          <input id="resumeFileInput" type="file" accept="application/pdf" class="hidden" />
+          <button id="uploadResumeBtn" class="px-3 py-2 rounded border text-sm">Upload PDF</button>
+          <button id="clearResume" class="px-3 py-2 rounded text-sm">Clear</button>
+        </div>
       </div>
+
+      <div class="mt-4">
+        <div class="text-sm text-gray-500">Resume preview (saved locally). You can upload a new PDF to replace.</div>
+        <div id="resumePreview" class="mt-3 border rounded p-3 text-sm text-gray-700 dark:text-gray-200">No resume uploaded.</div>
+      </div>
+    </section>
+
+    <!-- SKILLS (editable tags) -->
+    <section id="skills" class="reveal mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-semibold">Skills</h2>
+        <div class="flex gap-2">
+          <input id="skillInput" class="px-3 py-2 border rounded text-sm" placeholder="Add skill and press Enter" />
+          <button id="clearSkills" class="px-3 py-2 rounded text-sm">Clear</button>
+        </div>
+      </div>
+      <div id="skillsList" class="flex flex-wrap gap-2"></div>
+      <p class="mt-3 text-sm text-gray-500">Edit skills here — they save locally so you can preview before pushing to GitHub.</p>
+    </section>
+
+    <!-- LEARNING JOURNAL (weekly posts with media) -->
+    <section id="learning" class="reveal mb-8 card p-4">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-semibold">Learning Journal</h2>
+        <div class="flex gap-2">
+          <button id="newPostBtn" class="px-3 py-2 rounded bg-indigo-600 text-white text-sm">+ New post</button>
+          <button id="exportData" class="px-3 py-2 rounded border text-sm">Export</button>
+          <button id="importData" class="px-3 py-2 rounded border text-sm">Import</button>
+        </div>
+      </div>
+
+      <div id="postsList" class="grid gap-4"></div>
+
+      <p class="mt-3 text-sm text-gray-500">Create weekly blocks. Each post supports title, date/week, text, image or video upload. Saved locally; use Export to backup JSON.</p>
     </section>
 
     <footer class="mt-12 text-center text-sm text-gray-500">© <span id="yearEl"></span> Shivam — Robotics Engineer</footer>
   </main>
 
+  <!-- Floating contact button -->
   <a class="contact-fab" href="mailto:shivam@example.com" aria-label="Contact Shivam">
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><path d="M22 6l-10 7L2 6"></path></svg>
     <span>Contact</span>
   </a>
 
+  <!-- Modal container for editors -->
+  <div id="modalRoot" style="display:none"></div>
+
   <script>
-    // Theme toggle
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle && themeToggle.addEventListener('click', () => {
-      const isDark = document.body.classList.toggle('dark');
-      document.body.classList.toggle('bg-slate-900', isDark);
-      document.body.classList.toggle('text-white', isDark);
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-    });
+    // ---------- Utility & state ----------
+    const LS_KEY = 'shivam_portfolio_v1';
+    let state = {
+      about: { text: "Robotics engineer focused on perception and embedded systems." },
+      projects: [],
+      resume: null, // {name, dataUrl}
+      skills: [],
+      posts: []
+    };
 
-    // Buttons that scroll to sections
-    document.querySelectorAll('button[data-scroll-to]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-scroll-to');
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({behavior: 'smooth'});
+    function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+    function loadState(){
+      const raw = localStorage.getItem(LS_KEY);
+      if(raw) try{ state = JSON.parse(raw); }catch(e){ console.error('corrupt state', e); }
+    }
+
+    // ---------- DOM helpers ----------
+    function $(sel, ctx=document) { return ctx.querySelector(sel); }
+    function $all(sel, ctx=document) { return Array.from(ctx.querySelectorAll(sel)); }
+
+    // ---------- Renderers ----------
+    function renderProjects(){
+      const grid = $('#projectsGrid'); grid.innerHTML = '';
+      state.projects.forEach((p, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card p-4';
+        card.innerHTML = `
+          <div class="flex gap-4">
+            <div class="w-28 h-20 bg-gray-100 dark:bg-slate-800 rounded overflow-hidden flex items-center justify-center" style="flex:0 0 112px">
+              ${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}" style="width:100%;height:100%;object-fit:cover">` : '<div class="text-sm text-gray-400">No image</div>'}
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="font-semibold">${escapeHtml(p.title || 'Untitled')}</div>
+                  <div class="text-sm text-gray-500 mt-1">${escapeHtml(p.description || '')}</div>
+                </div>
+                <div class="text-right ml-3 flex flex-col gap-2">
+                  <a href="${p.repo||'#'}" target="_blank" class="text-xs underline">Repo</a>
+                  <a href="${p.demo||'#'}" target="_blank" class="text-xs underline">Demo</a>
+                  <button data-edit-index="${idx}" class="editProjectBtn text-xs text-indigo-600">Edit</button>
+                  <button data-delete-index="${idx}" class="deleteProjectBtn text-xs text-red-600">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
       });
-    });
+    }
 
-    // Smooth for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', function(e){
-        const target = document.querySelector(this.getAttribute('href'));
-        if(target){ e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    function renderSkills(){
+      const list = $('#skillsList'); list.innerHTML = '';
+      state.skills.forEach((s, i)=>{
+        const chip = document.createElement('span');
+        chip.className = 'px-3 py-1 bg-gray-100 dark:bg-slate-800 rounded text-sm';
+        chip.textContent = s;
+        const x = document.createElement('button'); x.className='ml-2 text-xs text-red-500'; x.textContent='✕';
+        x.addEventListener('click', ()=>{ state.skills.splice(i,1); saveState(); renderSkills(); });
+        chip.appendChild(x);
+        list.appendChild(chip);
       });
-    });
+    }
 
-    // Year
-    document.getElementById('yearEl').textContent = new Date().getFullYear();
+    function renderResume(){
+      const el = $('#resumePreview');
+      if(state.resume && state.resume.name){
+        el.innerHTML = `Uploaded: <strong>${escapeHtml(state.resume.name)}</strong> <button id="downloadResume" class="ml-3 text-sm underline">Download</button>`;
+        $('#downloadResume').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href = state.resume.data; a.download = state.resume.name; a.click(); });
+        $('#resumeLink').href = state.resume.data; $('#resumeLink').target = '_blank';
+      } else {
+        el.textContent = 'No resume uploaded.'; $('#resumeLink').href = '#';
+      }
+    }
+
+    function renderPosts(){
+      const box = $('#postsList'); box.innerHTML='';
+      state.posts.slice().reverse().forEach((post, idxReverse)=>{
+        // store idxReverse maps to real idx
+        const realIdx = state.posts.length-1-idxReverse;
+        const card = document.createElement('div'); card.className='card p-4';
+        card.innerHTML = `
+          <div class="flex items-start gap-4">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="font-semibold">${escapeHtml(post.title || 'Untitled')}</div>
+                  <div class="text-xs text-gray-500">${escapeHtml(post.week || '')}</div>
+                </div>
+                <div class="flex gap-2">
+                  <button data-edit-post="${realIdx}" class="text-sm text-indigo-600">Edit</button>
+                  <button data-delete-post="${realIdx}" class="text-sm text-red-600">Delete</button>
+                </div>
+              </div>
+              <div class="mt-2 text-sm text-gray-700 dark:text-gray-200">${escapeHtml(post.content || '')}</div>
+              ${post.image ? `<img src="${post.image}" class="mt-3 rounded max-h-48 object-cover" />` : ''}
+              ${post.video ? `<video class="mt-3 max-h-48" controls src="${post.video}"></video>` : ''}
+            </div>
+          </div>
+        `;
+        box.appendChild(card);
+      });
+    }
+
+    // ---------- Editing UI (modal-based) ----------
+    function openModal(html){
+      const root = document.getElementById('modalRoot');
+      root.style.display='block';
+      root.innerHTML = `<div class="modal-backdrop"> <div class="modal">${html}</div></div>`;
+      root.querySelector('.modal-backdrop').addEventListener('click', (e)=>{ if(e.target.classList.contains('modal-backdrop')) closeModal(); });
+    }
+    function closeModal(){ const root=document.getElementById('modalRoot'); root.style.display='none'; root.innerHTML=''; }
+
+    function editProjectForm(index){
+      const p = state.projects[index] || {title:'',description:'',repo:'',demo:'',image:''};
+      openModal(`
+        <div>
+          <h3 class="text-lg font-semibold mb-3">${index===undefined? 'New' : 'Edit'} Project</h3>
+          <label class="block text-sm">Title</label>
+          <input id="proj_title" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(p.title||'')}">
+          <label class="block text-sm">Description</label>
+          <textarea id="proj_desc" class="w-full p-2 border rounded mt-1 mb-2">${escapeAttr(p.description||'')}</textarea>
+          <label class="block text-sm">Repo URL</label>
+          <input id="proj_repo" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(p.repo||'')}">
+          <label class="block text-sm">Demo URL</label>
+          <input id="proj_demo" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(p.demo||'')}">
+          <label class="block text-sm">Image (optional)</label>
+          <input id="proj_image" type="file" accept="image/*" class="w-full mb-3">
+
+          <div class="flex justify-end gap-2 mt-3">
+            <button id="cancelBtn" class="px-3 py-1 rounded border">Cancel</button>
+            <button id="saveProjBtn" class="px-3 py-1 rounded bg-sky-600 text-white">Save</button>
+          </div>
+        </div>
+      `);
+
+      $('#cancelBtn').addEventListener('click', closeModal);
+      $('#saveProjBtn').addEventListener('click', async ()=>{
+        const title = $('#proj_title').value.trim();
+        const desc = $('#proj_desc').value.trim();
+        const repo = $('#proj_repo').value.trim();
+        const demo = $('#proj_demo').value.trim();
+        const file = $('#proj_image').files && $('#proj_image').files[0];
+        let dataUrl = p.image || '';
+        if(file){ dataUrl = await readFileAsDataURL(file); }
+        const newObj = { title, description:desc, repo, demo, image: dataUrl };
+        if(index !== undefined){ state.projects[index] = newObj; } else { state.projects.push(newObj); }
+        saveState(); renderProjects(); closeModal();
+      });
+    }
+
+    function newPostForm(editIndex){
+      const post = typeof editIndex==='number' ? state.posts[editIndex] : {title:'', week:'', content:'', image:'', video:''};
+      openModal(`
+        <div>
+          <h3 class="text-lg font-semibold mb-3">${typeof editIndex==='number' ? 'Edit' : 'New'} Post</h3>
+          <label class="block text-sm">Title</label>
+          <input id="post_title" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(post.title||'')}">
+          <label class="block text-sm">Week / Date</label>
+          <input id="post_week" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(post.week||'')}">
+          <label class="block text-sm">Content</label>
+          <textarea id="post_content" class="w-full p-2 border rounded mt-1 mb-2">${escapeAttr(post.content||'')}</textarea>
+          <label class="block text-sm">Image (optional)</label>
+          <input id="post_image" type="file" accept="image/*" class="w-full mb-2">
+          <label class="block text-sm">Video (optional)</label>
+          <input id="post_video" type="file" accept="video/*" class="w-full mb-2">
+
+          <div class="flex justify-end gap-2 mt-3">
+            <button id="cancelPost" class="px-3 py-1 rounded border">Cancel</button>
+            <button id="savePost" class="px-3 py-1 rounded bg-indigo-600 text-white">Save</button>
+          </div>
+        </div>
+      `);
+
+      $('#cancelPost').addEventListener('click', closeModal);
+      $('#savePost').addEventListener('click', async ()=>{
+        const title = $('#post_title').value.trim();
+        const week = $('#post_week').value.trim();
+        const content = $('#post_content').value.trim();
+        const imgFile = $('#post_image').files && $('#post_image').files[0];
+        const vidFile = $('#post_video').files && $('#post_video').files[0];
+        let img = post.image||''; let vid = post.video||'';
+        if(imgFile) img = await readFileAsDataURL(imgFile);
+        if(vidFile) vid = await readFileAsDataURL(vidFile);
+        const obj = { title, week, content, image: img, video: vid };
+        if(typeof editIndex==='number'){ state.posts[editIndex] = obj; } else { state.posts.push(obj); }
+        saveState(); renderPosts(); closeModal();
+      });
+    }
+
+    // ---------- Helpers ----------
+    function readFileAsDataURL(file){ return new Promise((res, rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
+
+    // ---------- Init & events ----------
+    function init(){
+      loadState();
+      // render initial
+      renderProjects(); renderSkills(); renderResume(); renderPosts();
+
+      // restore theme
+      const saved = localStorage.getItem('shivam_theme');
+      if(saved === 'dark'){ document.body.classList.add('dark'); document.body.classList.add('bg-slate-900'); document.body.classList.add('text-white'); $('#themeToggle').textContent = '☀️'; }
+
+      // nav scroll
+      $all('button[data-scroll]').forEach(b=> b.addEventListener('click', ()=>{ const id = b.getAttribute('data-scroll'); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }));
+
+      // theme toggle
+      $('#themeToggle').addEventListener('click', ()=>{ const isDark = document.body.classList.toggle('dark'); document.body.classList.toggle('bg-slate-900', isDark); document.body.classList.toggle('text-white', isDark); $('#themeToggle').textContent = isDark ? '☀️' : '🌙'; localStorage.setItem('shivam_theme', isDark ? 'dark' : 'light'); });
+
+      // edit about
+      $('#editAbout').addEventListener('click', ()=>{
+        openModal(`<div>
+          <h3 class="text-lg font-semibold mb-3">Edit About</h3>
+          <textarea id="aboutText" class="w-full p-2 border rounded h-32">${escapeAttr(state.about.text)}</textarea>
+          <div class="flex justify-end gap-2 mt-3"><button id="cancelAbout" class="px-3 py-1 rounded border">Cancel</button><button id="saveAbout" class="px-3 py-1 rounded bg-sky-600 text-white">Save</button></div>
+        </div>`);
+        $('#cancelAbout').addEventListener('click', closeModal);
+        $('#saveAbout').addEventListener('click', ()=>{ state.about.text = $('#aboutText').value; saveState(); closeModal(); location.reload(); });
+      });
+
+      // add project
+      $('#addProject').addEventListener('click', ()=> editProjectForm());
+      // delegated edit/delete
+      document.body.addEventListener('click', (e)=>{
+        if(e.target.matches('.editProjectBtn')){ const idx = Number(e.target.getAttribute('data-edit-index')); editProjectForm(idx); }
+        if(e.target.matches('.deleteProjectBtn')){ const idx = Number(e.target.getAttribute('data-delete-index')); if(confirm('Delete project?')){ state.projects.splice(idx,1); saveState(); renderProjects(); } }
+        if(e.target.matches('[data-edit-post]')){ const i = Number(e.target.getAttribute('data-edit-post')); newPostForm(i); }
+        if(e.target.matches('[data-delete-post]')){ const i = Number(e.target.getAttribute('data-delete-post')); if(confirm('Delete post?')){ state.posts.splice(i,1); saveState(); renderPosts(); } }
+      });
+
+      // export/import
+      $('#exportData').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href = 'data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(state)); a.download='portfolio-data.json'; a.click(); });
+      $('#exportDataProjects').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href = 'data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify({projects:state.projects})); a.download='projects.json'; a.click(); });
+      $('#importData').addEventListener('click', ()=>{
+        const inp = document.createElement('input'); inp.type='file'; inp.accept='application/json'; inp.onchange = async ()=>{
+          const f = inp.files[0]; if(!f) return; const txt = await f.text(); try{ const obj = JSON.parse(txt); if(obj.about) state = obj; else if(obj.projects) state.projects = obj.projects; else if(obj.posts) state.posts = obj.posts; saveState(); location.reload(); }catch(e){ alert('Invalid JSON'); }
+        }; inp.click();
+      });
+
+      // resume upload
+      $('#uploadResumeBtn').addEventListener('click', ()=>{ $('#resumeFileInput').click(); });
+      $('#resumeFileInput').addEventListener('change', async (e)=>{ const f = e.target.files[0]; if(!f) return; const data = await readFileAsDataURL(f); state.resume = { name: f.name, data }; saveState(); renderResume(); });
+      $('#clearResume').addEventListener('click', ()=>{ if(confirm('Clear resume?')){ state.resume=null; saveState(); renderResume(); }});
+
+      // skills input
+      $('#skillInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); const v = e.target.value.trim(); if(v){ state.skills.push(v); e.target.value=''; saveState(); renderSkills(); } } });
+      $('#clearSkills').addEventListener('click', ()=>{ if(confirm('Clear skills?')){ state.skills=[]; saveState(); renderSkills(); }});
+
+      // posts
+      $('#newPostBtn').addEventListener('click', ()=> newPostForm());
+
+      // intersection observer for reveal
+      const obs = new IntersectionObserver((entries)=>{ entries.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('visible'); obs.unobserve(ent.target); } }); }, {threshold:0.12});
+      document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+      // wire delegated edit post buttons
+      document.body.addEventListener('click', (e)=>{
+        if(e.target.matches('[data-edit-post]')){ newPostForm(Number(e.target.getAttribute('data-edit-post'))); }
+      });
+
+      // wire delete post and edit post via render list (delegated earlier)
+
+      // fill year
+      document.getElementById('yearEl').textContent = new Date().getFullYear();
+
+      // initial small animation on load
+      document.body.animate([{opacity:0},{opacity:1}], {duration:400});
+
+      // initial about text
+      $('#about .card')?.querySelectorAll ? null : null; // no-op
+      // optionally display about text text area - for now About uses state.about.text when editing
+    }
+
+    // ---------- Kick off ----------
+    init();
+
   </script>
 </body>
 </html>
