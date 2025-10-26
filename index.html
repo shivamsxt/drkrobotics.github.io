@@ -1,227 +1,216 @@
 <!doctype html>
+<!--
+  Shivam — Static Portfolio (read-only)
+  --------------------------------------------------
+  IMPORTANT:
+  - This file is a static, read-only portfolio intended for public viewing.
+  - **Edit the data below** in the `DATA` constant to update projects, resume link, skills, and learning posts.
+  - Do **not** expose editing/upload UI on the published page — only change the code in this file or a separate `data.js` that you keep private.
+
+  Deployment: save as `index.html` at repo root and publish via GitHub Pages (main / root).
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Shivam — Robotics Engineer Portfolio</title>
-  <!-- Tailwind CDN for quick styling -->
+  <title>Shivam — Robotics Engineer</title>
+  <meta name="description" content="Shivam — Robotics Engineer. Perception, SLAM, Embedded, ROS" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Visual polish*/
     :root{
-      --accent:#06b6d4;
-      --accent-2:#0ea5e9;
-      --card-bg: #ffffff;
-      --muted:#6b7280;
+      --bg: #f8fafc; --text: #0f172a; --card: #ffffff; --muted:#6b7280; --accent:#06b6d4;
     }
-    .dark { --card-bg:#0f172a; --muted:#9ca3af; }
-    body{transition:background .25s,color .25s;}
-    .logo{width:40px;height:40px}
-    .contact-fab{position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px 14px;border-radius:9999px;box-shadow:0 10px 30px rgba(2,6,23,0.25);z-index:60;font-weight:600;display:flex;align-items:center;gap:8px;text-decoration:none}
+    .dark-mode{ --bg:#0b1220; --text:#e6eef8; --card:#071226; --muted:#9ca3af; }
+    body{background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;padding:0;margin:0;}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.06);}
+    .logo{width:44px;height:44px}
+    .muted{color:var(--muted)}
+    a{color:var(--accent)}
 
-    /* Reveal on scroll */
-    .reveal { opacity:0; transform:translateY(14px) scale(.995); transition:opacity .6s ease, transform .6s ease; }
-    .reveal.visible { opacity:1; transform:none; }
+    /* reveal */
+    .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:none}
 
-    /* Tiny card animation */
-    .card { background:var(--card-bg); box-shadow:0 6px 20px rgba(2,6,23,0.06); border-radius:12px; }
+    /* header sticky */
+    header{backdrop-filter: blur(6px)}
 
-    /* Modal */
-    .modal-backdrop{ background: rgba(2,6,23,0.5); position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:80 }
-    .modal{ width:100%; max-width:720px; background:var(--card-bg); padding:18px; border-radius:10px; box-shadow:0 10px 40px rgba(2,6,23,0.3); }
+    /* project thumbnail */
+    .thumb{width:100%;height:160px;object-fit:cover;border-radius:8px}
 
-    /* Simple pulsing for CTA */
-    @keyframes pulseSlow { 0% { transform:scale(1) } 50% { transform:scale(1.03) } 100% { transform:scale(1) } }
-    .pulse { animation: pulseSlow 3s infinite; }
+    /* subtle hover */
+    .hover-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.12)}
 
-    /* responsive tweaks */
-    @media (max-width:640px){ .desktop-only{ display:none } }
+    /* small responsive tweaks */
+    @media (max-width:768px){ .desktop-only{display:none} }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen" id="pageRoot">
-  <!-- Header -->
-  <header class="bg-white dark:bg-slate-900 shadow sticky top-0 z-40">
+<body id="pageRoot">
+  <header class="sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <svg class="logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-          <rect x="4" y="4" width="40" height="40" rx="8" fill="var(--accent)"></rect>
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#0891b2"></rect>
           <path d="M14 34L24 14L34 34" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <div>
-          <div class="text-xl font-extrabold leading-none">Shivam</div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">Robotics Engineer · Perception · ROS · Embedded</div>
+          <div class="text-lg font-extrabold">Shivam</div>
+          <div class="text-xs muted">Robotics Engineer · Perception · SLAM · Embedded</div>
         </div>
       </div>
 
       <nav class="flex items-center gap-3 text-sm">
-        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="about">About</button>
-        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="projects">Projects</button>
-        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="resume">Resume</button>
-        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="skills">Skills</button>
-        <button class="nav-btn px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800" data-scroll="learning">Learning</button>
-        <button id="themeToggle" class="px-3 py-2 rounded border text-sm" aria-label="toggle theme">🌙</button>
+        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="about">About</button>
+        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="projects">Projects</button>
+        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="resume">Resume</button>
+        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="skills">Skills</button>
+        <button class="px-3 py-2 rounded hover:bg-gray-100" data-scroll="learning">Learning</button>
+        <button id="themeToggle" class="px-3 py-2 rounded border">🌙</button>
       </nav>
     </div>
   </header>
 
-  <!-- Main content -->
   <main class="max-w-6xl mx-auto px-6 py-10">
-    <!-- HERO / ABOUT -->
-    <section id="about" class="reveal p-6 card mb-8">
+    <!-- ABOUT -->
+    <section id="about" class="reveal mb-8 card p-6">
       <div class="md:flex md:items-center md:justify-between gap-6">
         <div>
           <h1 class="text-3xl font-extrabold">I build robots that see, plan, and act.</h1>
-          <p class="mt-3 text-gray-600 dark:text-gray-300">Robotics engineer focused on perception, autonomy, and embedded systems. I build SLAM stacks, perception pipelines, and production-ready edge deployments.</p>
+          <p class="mt-3 muted">Robotics engineer focused on perception, autonomy, and embedded control. Production-minded: SLAM, perception pipelines, sensor fusion and edge deployment.</p>
 
-          <div class="mt-4 flex flex-wrap gap-3">
-            <a id="resumeLink" class="px-4 py-2 rounded border text-sm" href="#" target="_blank">Download resume</a>
-            <button id="editAbout" class="px-4 py-2 rounded bg-sky-600 text-white text-sm">Edit About</button>
-            <a class="px-4 py-2 rounded bg-gray-800 text-white text-sm desktop-only pulse" href="#projects">See projects</a>
+          <div class="mt-4 flex gap-3">
+            <a id="resumeDownload" class="px-4 py-2 rounded border text-sm" href="#">Download resume</a>
+            <a class="px-4 py-2 rounded bg-sky-600 text-white text-sm desktop-only" href="#projects">See projects</a>
           </div>
         </div>
 
         <div class="mt-6 md:mt-0 w-full md:w-1/3">
-          <div class="card p-4">
-            <div class="text-sm text-gray-500">Quick stats</div>
+          <div class="p-4 card">
+            <div class="text-sm muted">Quick stats</div>
             <div class="mt-3 grid grid-cols-2 gap-3">
-              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
-                <div class="text-xs text-gray-500">Robots built</div>
-                <div class="text-lg font-bold">4</div>
-              </div>
-              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
-                <div class="text-xs text-gray-500">SLAM stacks</div>
-                <div class="text-lg font-bold">3</div>
-              </div>
-              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
-                <div class="text-xs text-gray-500">Edge deploys</div>
-                <div class="text-lg font-bold">2</div>
-              </div>
-              <div class="p-3 bg-gray-50 dark:bg-slate-800 rounded">
-                <div class="text-xs text-gray-500">Languages</div>
-                <div class="text-lg font-bold">C++, Python</div>
-              </div>
+              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">Robots built</div><div class="text-lg font-bold" id="statRobots">—</div></div>
+              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">SLAM stacks</div><div class="text-lg font-bold" id="statSlam">—</div></div>
+              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">Edge deploys</div><div class="text-lg font-bold" id="statEdge">—</div></div>
+              <div class="p-3 bg-gray-50 rounded"><div class="text-xs muted">Languages</div><div class="text-lg font-bold" id="statLang">—</div></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PROJECTS (editable) -->
+    <!-- PROJECTS -->
     <section id="projects" class="reveal mb-8">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold">Projects</h2>
-        <div class="flex gap-2">
-          <button id="addProject" class="px-3 py-2 rounded bg-green-600 text-white text-sm">+ Add project</button>
-          <button id="exportDataProjects" class="px-3 py-2 rounded border text-sm">Export</button>
-        </div>
+        <div class="muted text-sm">All project links and demos are stored in the code — update `DATA.projects` to change.</div>
       </div>
 
-      <div id="projectsGrid" class="grid md:grid-cols-2 gap-4"></div>
-
-      <p class="mt-3 text-sm text-gray-500">Click a card's Edit to change title/links/description or upload an image. Use Add project to create new cards. All data saved locally (you can export/import).</p>
+      <div id="projectsGrid" class="grid md:grid-cols-2 gap-6"></div>
     </section>
 
-    <!-- RESUME (editable upload + text) -->
+    <!-- RESUME -->
     <section id="resume" class="reveal mb-8 card p-6">
       <div class="flex items-center justify-between">
         <h2 class="text-2xl font-semibold">Resume</h2>
-        <div class="flex gap-2">
-          <input id="resumeFileInput" type="file" accept="application/pdf" class="hidden" />
-          <button id="uploadResumeBtn" class="px-3 py-2 rounded border text-sm">Upload PDF</button>
-          <button id="clearResume" class="px-3 py-2 rounded text-sm">Clear</button>
-        </div>
+        <a id="resumeLinkTop" href="#" target="_blank" class="px-3 py-2 rounded border text-sm">Open PDF</a>
       </div>
-
-      <div class="mt-4">
-        <div class="text-sm text-gray-500">Resume preview (saved locally). You can upload a new PDF to replace.</div>
-        <div id="resumePreview" class="mt-3 border rounded p-3 text-sm text-gray-700 dark:text-gray-200">No resume uploaded.</div>
-      </div>
+      <div class="mt-4 muted text-sm">Resume PDF link is configured in the code (DATA.resume.url). Edit DATA to update.</div>
     </section>
 
-    <!-- SKILLS (editable tags) -->
+    <!-- SKILLS -->
     <section id="skills" class="reveal mb-8">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold">Skills</h2>
-        <div class="flex gap-2">
-          <input id="skillInput" class="px-3 py-2 border rounded text-sm" placeholder="Add skill and press Enter" />
-          <button id="clearSkills" class="px-3 py-2 rounded text-sm">Clear</button>
-        </div>
+        <div class="muted text-sm">Skills are read-only and stored in the code.</div>
       </div>
       <div id="skillsList" class="flex flex-wrap gap-2"></div>
-      <p class="mt-3 text-sm text-gray-500">Edit skills here — they save locally so you can preview before pushing to GitHub.</p>
     </section>
 
-    <!-- LEARNING JOURNAL (weekly posts with media) -->
+    <!-- LEARNING JOURNAL -->
     <section id="learning" class="reveal mb-8 card p-4">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold">Learning Journal</h2>
-        <div class="flex gap-2">
-          <button id="newPostBtn" class="px-3 py-2 rounded bg-indigo-600 text-white text-sm">+ New post</button>
-          <button id="exportData" class="px-3 py-2 rounded border text-sm">Export</button>
-          <button id="importData" class="px-3 py-2 rounded border text-sm">Import</button>
-        </div>
+        <div class="muted text-sm">Weekly learning posts — edit `DATA.posts` to change or add posts.</div>
       </div>
-
       <div id="postsList" class="grid gap-4"></div>
-
-      <p class="mt-3 text-sm text-gray-500">Create weekly blocks. Each post supports title, date/week, text, image or video upload. Saved locally; use Export to backup JSON.</p>
     </section>
 
-    <footer class="mt-12 text-center text-sm text-gray-500">© <span id="yearEl"></span> Shivam — Robotics Engineer</footer>
+    <footer class="mt-12 text-center muted">© <span id="yearEl"></span> Shivam — Robotics Engineer</footer>
   </main>
 
-  <!-- Floating contact button -->
-  <a class="contact-fab" href="mailto:shivam@example.com" aria-label="Contact Shivam">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><path d="M22 6l-10 7L2 6"></path></svg>
-    <span>Contact</span>
-  </a>
-
-  <!-- Modal container for editors -->
-  <div id="modalRoot" style="display:none"></div>
-
   <script>
-    // ---------- Utility & state ----------
-    const LS_KEY = 'shivam_portfolio_v1';
-    let state = {
-      about: { text: "Robotics engineer focused on perception and embedded systems." },
-      projects: [],
-      resume: null, // {name, dataUrl}
-      skills: [],
-      posts: []
+    // ------------------ DATA: Edit this object to update your portfolio ------------------
+    // Keep this file private when editing; once published, the page is read-only to visitors.
+    const DATA = {
+      about: {
+        headline: 'I build robots that see, plan, and act.',
+        sub: 'Robotics engineer focused on perception, autonomy, and embedded control. Production-minded: SLAM, sensor fusion and edge deployment.'
+      },
+      resume: {
+        name: 'Shivam_Resume.pdf',
+        url: 'resume.pdf' // put your resume.pdf at repo root or a hosted URL
+      },
+      stats: { robots: 4, slam: 3, edge: 2, lang: 'C++, Python' },
+      skills: ['C++', 'Python', 'ROS1', 'ROS2', 'OpenCV', 'PCL', 'PyTorch', 'TensorRT', 'Docker'],
+      projects: [
+        {
+          title: 'Autonomous Mobile Robot',
+          description: 'Full ROS2 stack: LiDAR + camera fusion, ORB-SLAM3 mapping, A* planner, deployed on Jetson.',
+          repo: 'https://github.com/shivamsxt/autonomous-mobile-robot',
+          demo: 'https://youtube.com/your-demo-link',
+          image: 'images/project1.jpg'
+        },
+        {
+          title: 'LiDAR SLAM & 3D Mapping',
+          description: 'Robust outdoor mapping pipeline with loop closure and ICP refinement.',
+          repo: 'https://github.com/shivamsxt/lidar-slam',
+          demo: '',
+          image: 'images/project2.jpg'
+        }
+      ],
+      posts: [
+        { title: 'Week 1: Sensor Calibration', week: '2025-07-01', content: 'Calibrated camera-LiDAR extrinsics and improved depth fusion.', image: '', video: '' },
+        { title: 'Week 2: ORB-SLAM3 Tuning', week: '2025-07-08', content: 'Tuned ORB features and keyframe settings for indoor mapping.', image: '', video: '' }
+      ]
     };
+    // ------------------ end DATA ------------------
 
-    function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
-    function loadState(){
-      const raw = localStorage.getItem(LS_KEY);
-      if(raw) try{ state = JSON.parse(raw); }catch(e){ console.error('corrupt state', e); }
+    // --------------- Rendering (read-only) ---------------
+    function $(sel){ return document.querySelector(sel); }
+    function $all(sel){ return Array.from(document.querySelectorAll(sel)); }
+
+    function renderAbout(){
+      document.querySelector('#about h1').textContent = DATA.about.headline;
+      document.querySelector('#about p').textContent = DATA.about.sub;
+      $('#resumeDownload').href = DATA.resume.url;
+      $('#resumeDownload').setAttribute('download', DATA.resume.name);
+      $('#resumeLinkTop').href = DATA.resume.url;
+
+      // stats
+      document.getElementById('statRobots').textContent = DATA.stats.robots;
+      document.getElementById('statSlam').textContent = DATA.stats.slam;
+      document.getElementById('statEdge').textContent = DATA.stats.edge;
+      document.getElementById('statLang').textContent = DATA.stats.lang;
     }
 
-    // ---------- DOM helpers ----------
-    function $(sel, ctx=document) { return ctx.querySelector(sel); }
-    function $all(sel, ctx=document) { return Array.from(ctx.querySelectorAll(sel)); }
-
-    // ---------- Renderers ----------
     function renderProjects(){
-      const grid = $('#projectsGrid'); grid.innerHTML = '';
-      state.projects.forEach((p, idx) => {
+      const grid = document.getElementById('projectsGrid'); grid.innerHTML = '';
+      DATA.projects.forEach(p=>{
         const card = document.createElement('div');
-        card.className = 'card p-4';
+        card.className = 'card p-4 hover-card reveal';
         card.innerHTML = `
-          <div class="flex gap-4">
-            <div class="w-28 h-20 bg-gray-100 dark:bg-slate-800 rounded overflow-hidden flex items-center justify-center" style="flex:0 0 112px">
-              ${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}" style="width:100%;height:100%;object-fit:cover">` : '<div class="text-sm text-gray-400">No image</div>'}
+          <div class="md:flex gap-4 items-start">
+            <div class="md:w-48 mb-3 md:mb-0">
+              ${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}" class="thumb" />` : `<div class="w-full h-40 bg-gray-100 rounded flex items-center justify-center muted">No image</div>`}
             </div>
             <div class="flex-1">
-              <div class="flex items-start justify-between">
+              <div class="flex items-start justify-between gap-3">
                 <div>
-                  <div class="font-semibold">${escapeHtml(p.title || 'Untitled')}</div>
-                  <div class="text-sm text-gray-500 mt-1">${escapeHtml(p.description || '')}</div>
+                  <div class="font-semibold text-lg">${escapeHtml(p.title)}</div>
+                  <div class="muted text-sm mt-1">${escapeHtml(p.description)}</div>
                 </div>
-                <div class="text-right ml-3 flex flex-col gap-2">
-                  <a href="${p.repo||'#'}" target="_blank" class="text-xs underline">Repo</a>
-                  <a href="${p.demo||'#'}" target="_blank" class="text-xs underline">Demo</a>
-                  <button data-edit-index="${idx}" class="editProjectBtn text-xs text-indigo-600">Edit</button>
-                  <button data-delete-index="${idx}" class="deleteProjectBtn text-xs text-red-600">Delete</button>
+                <div class="text-right flex flex-col gap-2">
+                  ${p.repo ? `<a href="${p.repo}" target="_blank" class="text-xs underline">Repo</a>` : ''}
+                  ${p.demo ? `<a href="${p.demo}" target="_blank" class="text-xs underline">Demo</a>` : ''}
                 </div>
               </div>
             </div>
@@ -232,232 +221,67 @@
     }
 
     function renderSkills(){
-      const list = $('#skillsList'); list.innerHTML = '';
-      state.skills.forEach((s, i)=>{
-        const chip = document.createElement('span');
-        chip.className = 'px-3 py-1 bg-gray-100 dark:bg-slate-800 rounded text-sm';
-        chip.textContent = s;
-        const x = document.createElement('button'); x.className='ml-2 text-xs text-red-500'; x.textContent='✕';
-        x.addEventListener('click', ()=>{ state.skills.splice(i,1); saveState(); renderSkills(); });
-        chip.appendChild(x);
-        list.appendChild(chip);
+      const list = document.getElementById('skillsList'); list.innerHTML = '';
+      DATA.skills.forEach(s=>{
+        const span = document.createElement('span'); span.className='px-3 py-1 bg-gray-100 rounded text-sm muted'; span.textContent = s; list.appendChild(span);
       });
     }
 
-    function renderResume(){
-      const el = $('#resumePreview');
-      if(state.resume && state.resume.name){
-        el.innerHTML = `Uploaded: <strong>${escapeHtml(state.resume.name)}</strong> <button id="downloadResume" class="ml-3 text-sm underline">Download</button>`;
-        $('#downloadResume').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href = state.resume.data; a.download = state.resume.name; a.click(); });
-        $('#resumeLink').href = state.resume.data; $('#resumeLink').target = '_blank';
-      } else {
-        el.textContent = 'No resume uploaded.'; $('#resumeLink').href = '#';
-      }
-    }
-
     function renderPosts(){
-      const box = $('#postsList'); box.innerHTML='';
-      state.posts.slice().reverse().forEach((post, idxReverse)=>{
-        // store idxReverse maps to real idx
-        const realIdx = state.posts.length-1-idxReverse;
-        const card = document.createElement('div'); card.className='card p-4';
+      const box = document.getElementById('postsList'); box.innerHTML = '';
+      DATA.posts.slice().reverse().forEach(post=>{
+        const card = document.createElement('div'); card.className='card p-4 reveal';
         card.innerHTML = `
-          <div class="flex items-start gap-4">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <div>
-                  <div class="font-semibold">${escapeHtml(post.title || 'Untitled')}</div>
-                  <div class="text-xs text-gray-500">${escapeHtml(post.week || '')}</div>
-                </div>
-                <div class="flex gap-2">
-                  <button data-edit-post="${realIdx}" class="text-sm text-indigo-600">Edit</button>
-                  <button data-delete-post="${realIdx}" class="text-sm text-red-600">Delete</button>
-                </div>
+          <div>
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-semibold">${escapeHtml(post.title)}</div>
+                <div class="muted text-xs">${escapeHtml(post.week)}</div>
               </div>
-              <div class="mt-2 text-sm text-gray-700 dark:text-gray-200">${escapeHtml(post.content || '')}</div>
-              ${post.image ? `<img src="${post.image}" class="mt-3 rounded max-h-48 object-cover" />` : ''}
-              ${post.video ? `<video class="mt-3 max-h-48" controls src="${post.video}"></video>` : ''}
             </div>
+            <div class="mt-2 text-sm">${escapeHtml(post.content)}</div>
+            ${post.image ? `<img src="${post.image}" class="mt-3 thumb" />` : ''}
+            ${post.video ? `<video src="${post.video}" controls class="mt-3 w-full" />` : ''}
           </div>
         `;
         box.appendChild(card);
       });
     }
 
-    // ---------- Editing UI (modal-based) ----------
-    function openModal(html){
-      const root = document.getElementById('modalRoot');
-      root.style.display='block';
-      root.innerHTML = `<div class="modal-backdrop"> <div class="modal">${html}</div></div>`;
-      root.querySelector('.modal-backdrop').addEventListener('click', (e)=>{ if(e.target.classList.contains('modal-backdrop')) closeModal(); });
-    }
-    function closeModal(){ const root=document.getElementById('modalRoot'); root.style.display='none'; root.innerHTML=''; }
-
-    function editProjectForm(index){
-      const p = state.projects[index] || {title:'',description:'',repo:'',demo:'',image:''};
-      openModal(`
-        <div>
-          <h3 class="text-lg font-semibold mb-3">${index===undefined? 'New' : 'Edit'} Project</h3>
-          <label class="block text-sm">Title</label>
-          <input id="proj_title" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(p.title||'')}">
-          <label class="block text-sm">Description</label>
-          <textarea id="proj_desc" class="w-full p-2 border rounded mt-1 mb-2">${escapeAttr(p.description||'')}</textarea>
-          <label class="block text-sm">Repo URL</label>
-          <input id="proj_repo" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(p.repo||'')}">
-          <label class="block text-sm">Demo URL</label>
-          <input id="proj_demo" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(p.demo||'')}">
-          <label class="block text-sm">Image (optional)</label>
-          <input id="proj_image" type="file" accept="image/*" class="w-full mb-3">
-
-          <div class="flex justify-end gap-2 mt-3">
-            <button id="cancelBtn" class="px-3 py-1 rounded border">Cancel</button>
-            <button id="saveProjBtn" class="px-3 py-1 rounded bg-sky-600 text-white">Save</button>
-          </div>
-        </div>
-      `);
-
-      $('#cancelBtn').addEventListener('click', closeModal);
-      $('#saveProjBtn').addEventListener('click', async ()=>{
-        const title = $('#proj_title').value.trim();
-        const desc = $('#proj_desc').value.trim();
-        const repo = $('#proj_repo').value.trim();
-        const demo = $('#proj_demo').value.trim();
-        const file = $('#proj_image').files && $('#proj_image').files[0];
-        let dataUrl = p.image || '';
-        if(file){ dataUrl = await readFileAsDataURL(file); }
-        const newObj = { title, description:desc, repo, demo, image: dataUrl };
-        if(index !== undefined){ state.projects[index] = newObj; } else { state.projects.push(newObj); }
-        saveState(); renderProjects(); closeModal();
-      });
-    }
-
-    function newPostForm(editIndex){
-      const post = typeof editIndex==='number' ? state.posts[editIndex] : {title:'', week:'', content:'', image:'', video:''};
-      openModal(`
-        <div>
-          <h3 class="text-lg font-semibold mb-3">${typeof editIndex==='number' ? 'Edit' : 'New'} Post</h3>
-          <label class="block text-sm">Title</label>
-          <input id="post_title" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(post.title||'')}">
-          <label class="block text-sm">Week / Date</label>
-          <input id="post_week" class="w-full p-2 border rounded mt-1 mb-2" value="${escapeAttr(post.week||'')}">
-          <label class="block text-sm">Content</label>
-          <textarea id="post_content" class="w-full p-2 border rounded mt-1 mb-2">${escapeAttr(post.content||'')}</textarea>
-          <label class="block text-sm">Image (optional)</label>
-          <input id="post_image" type="file" accept="image/*" class="w-full mb-2">
-          <label class="block text-sm">Video (optional)</label>
-          <input id="post_video" type="file" accept="video/*" class="w-full mb-2">
-
-          <div class="flex justify-end gap-2 mt-3">
-            <button id="cancelPost" class="px-3 py-1 rounded border">Cancel</button>
-            <button id="savePost" class="px-3 py-1 rounded bg-indigo-600 text-white">Save</button>
-          </div>
-        </div>
-      `);
-
-      $('#cancelPost').addEventListener('click', closeModal);
-      $('#savePost').addEventListener('click', async ()=>{
-        const title = $('#post_title').value.trim();
-        const week = $('#post_week').value.trim();
-        const content = $('#post_content').value.trim();
-        const imgFile = $('#post_image').files && $('#post_image').files[0];
-        const vidFile = $('#post_video').files && $('#post_video').files[0];
-        let img = post.image||''; let vid = post.video||'';
-        if(imgFile) img = await readFileAsDataURL(imgFile);
-        if(vidFile) vid = await readFileAsDataURL(vidFile);
-        const obj = { title, week, content, image: img, video: vid };
-        if(typeof editIndex==='number'){ state.posts[editIndex] = obj; } else { state.posts.push(obj); }
-        saveState(); renderPosts(); closeModal();
-      });
-    }
-
-    // ---------- Helpers ----------
-    function readFileAsDataURL(file){ return new Promise((res, rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
     function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
 
-    // ---------- Init & events ----------
-    function init(){
-      loadState();
-      // render initial
-      renderProjects(); renderSkills(); renderResume(); renderPosts();
-
-      // restore theme
-      const saved = localStorage.getItem('shivam_theme');
-      if(saved === 'dark'){ document.body.classList.add('dark'); document.body.classList.add('bg-slate-900'); document.body.classList.add('text-white'); $('#themeToggle').textContent = '☀️'; }
-
-      // nav scroll
-      $all('button[data-scroll]').forEach(b=> b.addEventListener('click', ()=>{ const id = b.getAttribute('data-scroll'); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }));
-
-      // theme toggle
-      $('#themeToggle').addEventListener('click', ()=>{ const isDark = document.body.classList.toggle('dark'); document.body.classList.toggle('bg-slate-900', isDark); document.body.classList.toggle('text-white', isDark); $('#themeToggle').textContent = isDark ? '☀️' : '🌙'; localStorage.setItem('shivam_theme', isDark ? 'dark' : 'light'); });
-
-      // edit about
-      $('#editAbout').addEventListener('click', ()=>{
-        openModal(`<div>
-          <h3 class="text-lg font-semibold mb-3">Edit About</h3>
-          <textarea id="aboutText" class="w-full p-2 border rounded h-32">${escapeAttr(state.about.text)}</textarea>
-          <div class="flex justify-end gap-2 mt-3"><button id="cancelAbout" class="px-3 py-1 rounded border">Cancel</button><button id="saveAbout" class="px-3 py-1 rounded bg-sky-600 text-white">Save</button></div>
-        </div>`);
-        $('#cancelAbout').addEventListener('click', closeModal);
-        $('#saveAbout').addEventListener('click', ()=>{ state.about.text = $('#aboutText').value; saveState(); closeModal(); location.reload(); });
-      });
-
-      // add project
-      $('#addProject').addEventListener('click', ()=> editProjectForm());
-      // delegated edit/delete
-      document.body.addEventListener('click', (e)=>{
-        if(e.target.matches('.editProjectBtn')){ const idx = Number(e.target.getAttribute('data-edit-index')); editProjectForm(idx); }
-        if(e.target.matches('.deleteProjectBtn')){ const idx = Number(e.target.getAttribute('data-delete-index')); if(confirm('Delete project?')){ state.projects.splice(idx,1); saveState(); renderProjects(); } }
-        if(e.target.matches('[data-edit-post]')){ const i = Number(e.target.getAttribute('data-edit-post')); newPostForm(i); }
-        if(e.target.matches('[data-delete-post]')){ const i = Number(e.target.getAttribute('data-delete-post')); if(confirm('Delete post?')){ state.posts.splice(i,1); saveState(); renderPosts(); } }
-      });
-
-      // export/import
-      $('#exportData').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href = 'data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(state)); a.download='portfolio-data.json'; a.click(); });
-      $('#exportDataProjects').addEventListener('click', ()=>{ const a=document.createElement('a'); a.href = 'data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify({projects:state.projects})); a.download='projects.json'; a.click(); });
-      $('#importData').addEventListener('click', ()=>{
-        const inp = document.createElement('input'); inp.type='file'; inp.accept='application/json'; inp.onchange = async ()=>{
-          const f = inp.files[0]; if(!f) return; const txt = await f.text(); try{ const obj = JSON.parse(txt); if(obj.about) state = obj; else if(obj.projects) state.projects = obj.projects; else if(obj.posts) state.posts = obj.posts; saveState(); location.reload(); }catch(e){ alert('Invalid JSON'); }
-        }; inp.click();
-      });
-
-      // resume upload
-      $('#uploadResumeBtn').addEventListener('click', ()=>{ $('#resumeFileInput').click(); });
-      $('#resumeFileInput').addEventListener('change', async (e)=>{ const f = e.target.files[0]; if(!f) return; const data = await readFileAsDataURL(f); state.resume = { name: f.name, data }; saveState(); renderResume(); });
-      $('#clearResume').addEventListener('click', ()=>{ if(confirm('Clear resume?')){ state.resume=null; saveState(); renderResume(); }});
-
-      // skills input
-      $('#skillInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); const v = e.target.value.trim(); if(v){ state.skills.push(v); e.target.value=''; saveState(); renderSkills(); } } });
-      $('#clearSkills').addEventListener('click', ()=>{ if(confirm('Clear skills?')){ state.skills=[]; saveState(); renderSkills(); }});
-
-      // posts
-      $('#newPostBtn').addEventListener('click', ()=> newPostForm());
-
-      // intersection observer for reveal
-      const obs = new IntersectionObserver((entries)=>{ entries.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('visible'); obs.unobserve(ent.target); } }); }, {threshold:0.12});
-      document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-      // wire delegated edit post buttons
-      document.body.addEventListener('click', (e)=>{
-        if(e.target.matches('[data-edit-post]')){ newPostForm(Number(e.target.getAttribute('data-edit-post'))); }
-      });
-
-      // wire delete post and edit post via render list (delegated earlier)
-
-      // fill year
-      document.getElementById('yearEl').textContent = new Date().getFullYear();
-
-      // initial small animation on load
-      document.body.animate([{opacity:0},{opacity:1}], {duration:400});
-
-      // initial about text
-      $('#about .card')?.querySelectorAll ? null : null; // no-op
-      // optionally display about text text area - for now About uses state.about.text when editing
+    // --------------- Theme handling (fixed) ---------------
+    function applyTheme(isDark){
+      document.documentElement.classList.toggle('dark-mode', !!isDark);
+      localStorage.setItem('shivam_theme', isDark ? 'dark' : 'light');
+      $('#themeToggle').textContent = isDark ? '☀️' : '🌙';
     }
 
-    // ---------- Kick off ----------
+    $('#themeToggle').addEventListener('click', ()=>{ const dark = !document.documentElement.classList.contains('dark-mode'); applyTheme(dark); });
+    // restore
+    const savedTheme = localStorage.getItem('shivam_theme'); if(savedTheme === 'dark') applyTheme(true);
+
+    // --------------- Smooth nav ---------------
+    $all('button[data-scroll]').forEach(b=> b.addEventListener('click', ()=>{ const id = b.getAttribute('data-scroll'); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }));
+
+    // --------------- Intersection reveal ---------------
+    const obs = new IntersectionObserver((entries)=>{ entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('visible'); }); }, {threshold:0.12});
+    function observeReveals(){ $all('.reveal').forEach(el=>obs.observe(el)); }
+
+    // --------------- Init ---------------
+    function init(){
+      renderAbout(); renderProjects(); renderSkills(); renderPosts();
+      observeReveals();
+      document.getElementById('yearEl').textContent = new Date().getFullYear();
+      // small entrance animation
+      document.body.animate([{opacity:0},{opacity:1}],{duration:260});
+    }
+
     init();
 
+    // --------------- Editing note for you ---------------
+    // To update content, edit the DATA constant at the top of this file or split DATA into a private `data.js` that you do not expose publicly.
+    // Do NOT add editing UI or file upload on the public page. Keep ALL write operations out of client-facing HTML.
   </script>
 </body>
 </html>
